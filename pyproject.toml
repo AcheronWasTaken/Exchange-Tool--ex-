@@ -1,0 +1,16 @@
+[project]
+name = "ex"
+version = "1.0.0"
+description = "Exchange tool that converts a given input currency into another one"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+ex = "ex.main:cli"
+
+[tool.flit.sdist]
+exlude = ["src/ex/data"]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
