@@ -28,6 +28,11 @@ def get_data(base:str) -> tuple[list[dict], str]:
     except rq.HTTPError as e: 
         raise click.ClickException(f"Error with contacting API at {url}: {e}")
 
+    response_json = response.json()
+
+    if not response_json:
+        raise click.ClickException(f"{base.upper()} is either not a valid ISO Code, or no data can be retrieved. Please check again.")
+
     return write_data(response.json(), base.upper()), "api"
 
 @click.command()
@@ -51,6 +56,9 @@ def cli(base:str, quote:str, amount:float, debug:bool):
         if entry.get("quote") == quote.upper():
             rate = entry.get("rate")
             break
+
+    if not rate:
+        raise click.ClickException("Error with parsing data. Check that both ISO codes are valid.")
 
     result = round(amount * rate, 3)
 
